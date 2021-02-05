@@ -1,4 +1,5 @@
 import pygame
+import random
 from bullet import Bullet
 
 pygame.mixer.init()
@@ -130,12 +131,14 @@ class Spaceship:
     ## implement the AI feature
     ## for the right sided player
     def AI(self, opponent):
+        is_under_attack = False
         for bullet in opponent.bullets:
             if (
                 bullet.getPosition()[1] + bullet.getSize()[1] >= self.__position.y
                 and bullet.getPosition()[1]
                 <= self.__position.y + self.__size + self.__velocity
             ):
+                is_under_attack = True
                 if self.__flag:
                     if self.__position.y - self.__velocity >= 0:
                         self.moveUp()
@@ -149,13 +152,30 @@ class Spaceship:
                         self.moveDown()
                     else:
                         self.__flag = 1
-        if abs(self.__position.y - opponent.getPosition().y) <= 10:
+        if not is_under_attack:
+            if self.__position.y < opponent.getPosition().y:
+                self.moveDown()
+            if self.__position.y > opponent.getPosition().y:
+                self.moveUp()
+        if self.__health <= opponent.getHealth() and self.__health < 10:
+            self.moveLeft()
+        elif self.__position.x < self.window_width - 100:
+            self.moveRight()
+        if abs(self.__position.y - opponent.getPosition().y) <= 20:
             dist = True
             for bullet in self.bullets:
+                randomness = False
                 if abs(
                     bullet.getPosition().y - (self.__position.y + self.__size // 2)
                     <= 20
+                    and abs(bullet.getPosition().x - self.getPosition().x <= 10)
                 ):
                     dist = False
-            if dist:
+                if (
+                    abs((self.__position.y + self.__size // 2) - bullet.getPosition().x)
+                    <= 40
+                    and randomness == False
+                ):
+                    randomness = random.choice([True, False])
+            if dist or randomness:
                 self.shoot()
