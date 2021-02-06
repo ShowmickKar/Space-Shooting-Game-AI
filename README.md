@@ -1,6 +1,6 @@
 # **Space Shooting Game AI**
 
-This is the single-player version of my Space-Shooting game. I implemented a simple AI for the right spaceship and gave it the ability to attack and defend itself.
+This is the single-player version of my Space-Shooting game. I implemented a simple AI for the right-sided spaceship and gave it the ability to attack and defend itself.
 
 To test the game, simply clone the repository on your computer and run the main.py script from your IDE or terminal.
 
